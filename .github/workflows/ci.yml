@@ -28,3 +28,9 @@ jobs:
         run: python3 scripts/geo_delta_compare.py --baseline examples/evidence-baseline.json --retest examples/evidence-retest.json --output /tmp/geo-delta.json
       - name: Build synthetic action queue
         run: python3 scripts/geo_action_prioritizer.py --input examples/actions-sample.json --output /tmp/geo-action-queue.json
+      - name: Import synthetic CSV evidence
+        run: python3 scripts/geo_csv_import.py --input examples/evidence-sample.csv --study-id example-study --purpose "Synthetic import check" --output /tmp/geo-evidence-imported.json
+      - name: Build privacy review export
+        env:
+          GEO_ANONYMIZATION_SALT: synthetic-ci-salt-not-for-production
+        run: python3 scripts/geo_privacy_export.py --input /tmp/geo-evidence-imported.json --time-granularity day --output /tmp/geo-evidence-public.json

@@ -13,6 +13,12 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from geo_delta_compare import compare  # noqa: E402
 from geo_action_prioritizer import ActionError, build_queue, load_actions  # noqa: E402
+from geo_csv_import import CsvImportError, build_bundle as build_csv_bundle, load_csv  # noqa: E402
+from geo_privacy_export import (  # noqa: E402
+    PrivacyExportError,
+    build_privacy_bundle,
+    read_salt,
+)
 from geo_outcome_scorecard import (  # noqa: E402
     EvidenceError,
     build_scorecard,
@@ -87,6 +93,76 @@ class OutcomeScorecardTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ActionError, "impact must be 1..5"):
             validate_actions(actions)
+
+    def test_csv_import_matches_json_sample(self) -> None:
+        imported = load_csv(ROOT / "examples" / "evidence-sample.csv")
+        expected, _ = load_bundle(ROOT / "examples" / "evidence-sample.json")
+        self.assertEqual(imported, expected)
+        bundle = build_csv_bundle(
+            ROOT / "examples" / "evidence-sample.csv",
+            imported,
+            "example-study",
+            "Synthetic import check",
+        )
+        self.assertEqual(bundle["schema_version"], "1.1.0")
+        self.assertEqual(len(bundle["input_sha256"]), 64)
+
+    def test_csv_import_rejects_unknown_columns(self) -> None:
+        source = (ROOT / "examples" / "evidence-sample.csv").read_text(
+            encoding="utf-8"
+        )
+        lines = source.splitlines()
+        lines[0] += ",private_note"
+        lines[1] += ",must-not-leak"
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "unsafe.csv"
+            path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            with self.assertRaisesRegex(CsvImportError, "accidental disclosure"):
+                load_csv(path)
+
+    def test_privacy_export_is_deterministic_and_removes_identifiers(self) -> None:
+        salt = b"0123456789abcdef-test-salt"
+        first = build_privacy_bundle(
+            self.retest, salt, "day", "private-study-name"
+        )
+        second = build_privacy_bundle(
+            self.retest, salt, "day", "private-study-name"
+        )
+        self.assertEqual(first, second)
+        rendered = json.dumps(first, ensure_ascii=False)
+        self.assertNotIn("Example Brand", rendered)
+        self.assertNotIn("example.com", rendered)
+        self.assertNotIn("private-study-name", rendered)
+        self.assertTrue(first["observations"][0]["source_urls"][0].endswith(".invalid/"))
+        self.assertEqual(
+            first["observations"][0]["observed_at"], "2026-09-01T00:00:00Z"
+        )
+        validate_observations(first["observations"])
+
+    def test_privacy_export_requires_a_long_salt(self) -> None:
+        import os
+        from unittest.mock import patch
+
+        with patch.dict(os.environ, {"TEST_GEO_SALT": "short"}, clear=False):
+            with self.assertRaisesRegex(PrivacyExportError, "at least 16"):
+                read_salt("TEST_GEO_SALT")
+
+    def test_json_schema_versions_match_package(self) -> None:
+        version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        for name in ("evidence-bundle.schema.json", "action-bundle.schema.json"):
+            schema = json.loads((ROOT / "schemas" / name).read_text(encoding="utf-8"))
+            self.assertEqual(schema["properties"]["schema_version"]["const"], version)
+
+    def test_unsupported_evidence_schema_is_rejected(self) -> None:
+        payload = json.loads(
+            (ROOT / "examples" / "evidence-sample.json").read_text(encoding="utf-8")
+        )
+        payload["schema_version"] = "9.9.9"
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "future.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(EvidenceError, "unsupported schema_version"):
+                load_bundle(path)
 
 
 if __name__ == "__main__":

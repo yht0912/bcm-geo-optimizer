@@ -31,6 +31,7 @@
 - **站内与站外协同**：实体事实、可引用证据、独立佐证、内容可回答性与落地转化共同优化。
 - **生产发布门禁**：备份、源站、公网边缘、渲染结果、平台回执、监控和回滚分层验收。
 - **零运行依赖**：配套脚本完全离线、无密钥、无隐藏网络请求。
+- **跨工具证据格式**：提供严格 CSV 导入、版本化 JSON Schema 和隐私风险可控的案例导出。
 
 ## 安装
 
@@ -87,7 +88,34 @@ python3 scripts/geo_action_prioritizer.py \
   --output /tmp/geo-action-queue.json
 ```
 
+将表格导出转换为标准证据包：
+
+```bash
+python3 scripts/geo_csv_import.py \
+  --input examples/evidence-sample.csv \
+  --study-id example-study \
+  --purpose "合成数据导入检查" \
+  --output /tmp/geo-evidence.json
+```
+
+生成稳定可匹配的去标识化复核副本：
+
+```bash
+export GEO_ANONYMIZATION_SALT='使用至少16字节且不得入库的随机值'
+python3 scripts/geo_privacy_export.py \
+  --input /tmp/geo-evidence.json \
+  --time-granularity day \
+  --output /tmp/geo-evidence-public.json
+```
+
 脚本只验证和汇总输入的真实观察，不访问平台、不制造证据、不自动声称因果关系。
+
+隐私导出只能降低披露风险，不能保证绝对匿名；对外分享前必须复核残余识别风险。详见[数据互操作与隐私导出](references/data-interoperability.md)。
+
+标准数据契约：
+
+- [证据包 JSON Schema](schemas/evidence-bundle.schema.json)
+- [行动包 JSON Schema](schemas/action-bundle.schema.json)
 
 ## 质量验证
 

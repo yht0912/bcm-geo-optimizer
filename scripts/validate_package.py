@@ -21,9 +21,14 @@ REQUIRED = [
     "agents/openai.yaml",
     "references/evidence-contract.md",
     "references/action-model.md",
+    "references/data-interoperability.md",
+    "schemas/evidence-bundle.schema.json",
+    "schemas/action-bundle.schema.json",
     "scripts/geo_outcome_scorecard.py",
     "scripts/geo_delta_compare.py",
     "scripts/geo_action_prioritizer.py",
+    "scripts/geo_csv_import.py",
+    "scripts/geo_privacy_export.py",
     "evals/trigger-cases.json",
     "evals/outcome-cases.json",
 ]
@@ -91,6 +96,38 @@ def main() -> int:
                 continue
             if payload.get("version") != version:
                 fail(f"{relative} version must match VERSION", failures)
+
+    for relative in (
+        "schemas/evidence-bundle.schema.json",
+        "schemas/action-bundle.schema.json",
+    ):
+        path = ROOT / relative
+        if not path.exists():
+            continue
+        try:
+            schema = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            fail(f"invalid JSON Schema {relative}: {exc}", failures)
+            continue
+        schema_version = (
+            schema.get("properties", {}).get("schema_version", {}).get("const")
+        )
+        if schema_version != version:
+            fail(f"{relative} schema_version const must match VERSION", failures)
+
+    try:
+        from geo_action_prioritizer import load_actions
+        from geo_outcome_scorecard import load_bundle
+
+        for relative in (
+            "examples/evidence-baseline.json",
+            "examples/evidence-retest.json",
+            "examples/evidence-sample.json",
+        ):
+            load_bundle(ROOT / relative)
+        load_actions(ROOT / "examples/actions-sample.json")
+    except (ImportError, ValueError, OSError) as exc:
+        fail(f"example validation failed: {exc}", failures)
 
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts:

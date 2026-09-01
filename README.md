@@ -1,7 +1,7 @@
 # BCM GEO Outcome Engine
 
 [![CI](https://github.com/yht0912/bcm-geo-optimizer/actions/workflows/ci.yml/badge.svg)](https://github.com/yht0912/bcm-geo-optimizer/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-1.0.0-2563eb)](VERSION)
+[![Version](https://img.shields.io/badge/version-1.1.0-2563eb)](VERSION)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Zero dependencies](https://img.shields.io/badge/runtime-dependencies-0-16a34a)](scripts)
 
@@ -37,6 +37,7 @@ It reports the highest observed state without skipping steps.
 - **Production safety:** backup, origin, edge, rendered DOM, receipt, monitoring, and rollback checks.
 - **Conversion continuity:** recommendation visibility connects to qualified visits and business outcomes only when tracking is verified.
 - **Offline deterministic tools:** no API keys, no hidden network calls, and zero runtime dependencies.
+- **Portable evidence data:** strict CSV import, versioned JSON Schemas, and privacy-aware case export.
 
 ## Install
 
@@ -99,7 +100,29 @@ python3 scripts/geo_action_prioritizer.py \
   --output /tmp/geo-action-queue.json
 ```
 
+Import a spreadsheet export without accepting unknown columns:
+
+```bash
+python3 scripts/geo_csv_import.py \
+  --input examples/evidence-sample.csv \
+  --study-id example-study \
+  --purpose "Synthetic import check" \
+  --output /tmp/geo-evidence.json
+```
+
+Create a deterministic, de-identified review copy:
+
+```bash
+export GEO_ANONYMIZATION_SALT='use-a-private-random-value-of-16-or-more-bytes'
+python3 scripts/geo_privacy_export.py \
+  --input /tmp/geo-evidence.json \
+  --time-granularity day \
+  --output /tmp/geo-evidence-public.json
+```
+
 The tools validate supplied observations and calculate transparent rates with Wilson 95% intervals. They do not browse, invent evidence, or attribute causality.
+
+The privacy export reduces disclosure risk but does not guarantee anonymity. Review residual risks before sharing. See [data interoperability and privacy export](references/data-interoperability.md).
 
 ## Evidence input
 
@@ -115,6 +138,11 @@ Allowed primary states:
 - `negative`
 
 Examples are synthetic and use `example.com`; they are not provider benchmarks.
+
+Portable contracts:
+
+- [Evidence bundle JSON Schema](schemas/evidence-bundle.schema.json)
+- [Action bundle JSON Schema](schemas/action-bundle.schema.json)
 
 ## Verify the package
 

@@ -19,7 +19,8 @@ from typing import Any, Iterable
 from urllib.parse import urlparse
 
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1.0"
+SUPPORTED_INPUT_SCHEMA_VERSIONS = {"1.0", "1.0.0", "1.1.0"}
 ALLOWED_STATUSES = {
     "unavailable",
     "not_mentioned",
@@ -79,6 +80,12 @@ def load_bundle(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     else:
         raise EvidenceError("input must be a JSON list or an object with observations[]")
 
+    declared_version = metadata.get("schema_version")
+    if declared_version is not None and declared_version not in SUPPORTED_INPUT_SCHEMA_VERSIONS:
+        raise EvidenceError(
+            f"unsupported schema_version {declared_version!r}; supported: "
+            + ", ".join(sorted(SUPPORTED_INPUT_SCHEMA_VERSIONS))
+        )
     validate_observations(observations)
     return observations, metadata
 

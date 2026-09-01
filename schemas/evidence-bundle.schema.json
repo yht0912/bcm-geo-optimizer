@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/yht0912/bcm-geo-optimizer/schemas/evidence-bundle.schema.json",
+  "title": "BCM GEO Evidence Bundle",
+  "description": "Observed AI answer evidence. It does not establish causality or provider-wide behavior.",
+  "type": "object",
+  "required": ["schema_version", "study_id", "purpose", "observations"],
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "study_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "source_format": {
+      "type": "string",
+      "enum": ["json", "csv", "privacy-export", "synthetic"]
+    },
+    "input_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "anonymization": {
+      "type": "object",
+      "required": ["method", "salt_fingerprint", "time_granularity", "warning"],
+      "properties": {
+        "method": {"const": "hmac-sha256-v1"},
+        "salt_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{12}$"
+        },
+        "time_granularity": {
+          "type": "string",
+          "enum": ["exact", "day", "month", "none"]
+        },
+        "warning": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/observation"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "observation": {
+      "type": "object",
+      "required": [
+        "observation_id",
+        "panel_version",
+        "prompt_id",
+        "prompt_hash",
+        "provider",
+        "model",
+        "locale",
+        "region",
+        "observed_at",
+        "status",
+        "brand",
+        "source_urls",
+        "evidence_excerpt",
+        "limitations"
+      ],
+      "properties": {
+        "observation_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "panel_version": {"type": "string", "minLength": 1, "maxLength": 100},
+        "prompt_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "prompt_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "provider": {"type": "string", "minLength": 1, "maxLength": 100},
+        "model": {"type": "string", "minLength": 1, "maxLength": 200},
+        "locale": {
+          "type": "string",
+          "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$"
+        },
+        "region": {"type": "string", "minLength": 1, "maxLength": 32},
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "unavailable",
+            "not_mentioned",
+            "mentioned",
+            "cited",
+            "recommended",
+            "negative"
+          ]
+        },
+        "brand": {"type": "string", "minLength": 1, "maxLength": 300},
+        "source_urls": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://"
+          }
+        },
+        "evidence_excerpt": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "capture_ref": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "limitations": {"type": "string", "minLength": 1, "maxLength": 4000}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "cited"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {"source_urls": {"minItems": 1}}
+          }
+        }
+      ]
+    }
+  }
+}

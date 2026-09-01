@@ -1,6 +1,8 @@
 {
+  "schema_version": "1.1.0",
   "study_id": "example-study",
   "purpose": "Synthetic demonstration data only",
+  "source_format": "synthetic",
   "observations": [
     {
       "observation_id": "retest-001",

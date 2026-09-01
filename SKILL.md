@@ -3,7 +3,7 @@ name: bcm-geo-optimizer
 description: Outcome-first Generative Engine Optimization (GEO) and SEO workflow for improving real brand mentions, citations, recommendations, search visibility, and attributable conversions across AI assistants and search engines. Use when auditing or optimizing websites for ChatGPT, Claude, Gemini, Perplexity, Copilot, Google AI Overviews, Baidu, Bing, Google Search, or other answer/search systems; when measuring AI recommendation visibility; when planning llms.txt, structured data, entity, content, citation, indexing, or multi-site work; or when proving whether GEO changes produced externally observable results.
 license: MIT
 metadata:
-  version: 1.0.0
+  version: 1.1.0
   author: BCM
   category: marketing
   tags:
@@ -175,9 +175,17 @@ python3 scripts/geo_delta_compare.py \
 python3 scripts/geo_action_prioritizer.py \
   --input examples/actions-sample.json \
   --output /tmp/geo-action-queue.json
+
+python3 scripts/geo_csv_import.py \
+  --input examples/evidence-sample.csv \
+  --study-id example-study \
+  --purpose "Synthetic import check" \
+  --output /tmp/geo-evidence.json
 ```
 
 The scripts validate and aggregate supplied observations. They do not browse, generate evidence, or claim causation.
+
+For cross-tool JSON Schemas, CSV transport, or de-identified case exports, read [references/data-interoperability.md](references/data-interoperability.md). Treat privacy export as risk reduction, not guaranteed anonymity; review every transformed file before external sharing.
 
 ## Required deliverable
 
@@ -219,3 +227,4 @@ Use these labels consistently:
 - [Engine matrix](references/engine-matrix.md)
 - [Multi-site governance](references/multi-site-governance.md)
 - [Production release](references/production-release.md)
+- [Data interoperability and privacy export](references/data-interoperability.md)

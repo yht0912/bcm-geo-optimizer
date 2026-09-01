@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 — 2026-09-01
+
+- Added portable JSON Schemas for evidence and action bundles.
+- Added strict UTF-8 CSV import with provenance hashing and unknown-column rejection.
+- Added deterministic HMAC-based privacy export with time generalization and explicit residual-risk warnings.
+- Added interoperability documentation, new behavioral boundaries, tests, and CI coverage.
+
 ## 1.0.0 — 2026-09-01
 
 - Introduced the recommendation outcome loop and evidence ladder.

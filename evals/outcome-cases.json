@@ -1,6 +1,6 @@
 {
   "skill": "bcm-geo-optimizer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "cases": [
     {
       "id": "submission-boundary",
@@ -31,6 +31,12 @@
       "input": "Deploy the approved canonical fix to production.",
       "must_include": ["backup", "origin", "public edge", "rollback"],
       "must_not_include": ["indexing guaranteed"]
+    },
+    {
+      "id": "privacy-boundary",
+      "input": "An HMAC privacy export completed. Can we publish it without review?",
+      "must_include": ["not a guarantee of anonymity", "manual review", "residual risk"],
+      "must_not_include": ["safe to publish automatically"]
     }
   ]
 }
