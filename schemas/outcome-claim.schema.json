@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/yht0912/bcm-geo-optimizer/schemas/outcome-claim.schema.json",
+  "title": "BCM GEO Outcome Claim Bundle",
+  "description": "Evidence-linked public or internal claims. Passing the schema does not prove the claim; use the claim gate.",
+  "type": "object",
+  "required": ["schema_version", "methodology", "claims"],
+  "properties": {
+    "schema_version": {"const": "1.2.0"},
+    "methodology": {"$ref": "#/$defs/methodology"},
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/claim"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "methodology": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": {"const": "bcm-geo-evidence-action-retest"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"}
+      },
+      "additionalProperties": false
+    },
+    "comparison": {
+      "type": "object",
+      "required": ["baseline_study_id", "retest_study_id", "matched_pairs", "matched_coverage"],
+      "properties": {
+        "baseline_study_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "retest_study_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "matched_pairs": {"type": "integer", "minimum": 0},
+        "matched_coverage": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "additionalProperties": false
+    },
+    "causal_design": {
+      "type": "object",
+      "required": ["design_type", "control_reference", "assumptions"],
+      "properties": {
+        "design_type": {
+          "enum": ["randomized_controlled", "quasi_experimental", "interrupted_time_series"]
+        },
+        "control_reference": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "assumptions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1, "maxLength": 1000}
+        }
+      },
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "claim_id",
+        "claim_type",
+        "statement",
+        "highest_verified_state",
+        "evidence_refs",
+        "confidence",
+        "status",
+        "limitations"
+      ],
+      "properties": {
+        "claim_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "claim_type": {
+          "enum": ["implementation", "search_outcome", "ai_outcome", "observed_change", "causal_estimate"]
+        },
+        "statement": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "highest_verified_state": {
+          "enum": [
+            "reachable",
+            "discovered",
+            "crawled",
+            "indexed",
+            "ranked",
+            "mentioned",
+            "cited",
+            "recommended",
+            "converted"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 1000}
+        },
+        "comparison": {"$ref": "#/$defs/comparison"},
+        "causal_design": {"$ref": "#/$defs/causal_design"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "status": {"enum": ["substantiated", "qualified", "insufficient"]},
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1, "maxLength": 1000}
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

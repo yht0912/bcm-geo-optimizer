@@ -32,6 +32,8 @@
 - **生产发布门禁**：备份、源站、公网边缘、渲染结果、平台回执、监控和回滚分层验收。
 - **零运行依赖**：配套脚本完全离线、无密钥、无隐藏网络请求。
 - **跨工具证据格式**：提供严格 CSV 导入、版本化 JSON Schema 和隐私风险可控的案例导出。
+- **结论发布闸门**：实施完成、外部结果、观察变化与因果估计分别采用不同证据门槛。
+- **多语言诊断完整性**：中文和其他语言采用本地化规则，不把英文词数、代词或大写率当通用 GEO 标准。
 
 ## 安装
 
@@ -108,6 +110,15 @@ python3 scripts/geo_privacy_export.py \
   --output /tmp/geo-evidence-public.json
 ```
 
+对外发布前校验结果结论：
+
+```bash
+python3 scripts/geo_claim_gate.py \
+  --input examples/outcome-claims-sample.json \
+  --output /tmp/geo-claim-gate.json \
+  --strict
+```
+
 脚本只验证和汇总输入的真实观察，不访问平台、不制造证据、不自动声称因果关系。
 
 隐私导出只能降低披露风险，不能保证绝对匿名；对外分享前必须复核残余识别风险。详见[数据互操作与隐私导出](references/data-interoperability.md)。
@@ -116,6 +127,7 @@ python3 scripts/geo_privacy_export.py \
 
 - [证据包 JSON Schema](schemas/evidence-bundle.schema.json)
 - [行动包 JSON Schema](schemas/action-bundle.schema.json)
+- [结果结论 JSON Schema](schemas/outcome-claim.schema.json)
 
 ## 质量验证
 
@@ -128,7 +140,7 @@ python3 -m unittest discover -s tests -v
 
 ## 独立实现声明
 
-本项目围绕真实推荐结果、生产验证与业务归因独立设计和实现，不包含从其他 GEO 项目复制的源代码、文档表达或视觉资产。
+本项目围绕真实推荐结果、生产验证与业务归因独立设计和实现，不包含从其他 GEO 项目复制的源代码、提示词、评分公式、文档表达或视觉资产。详见[方法与知识产权边界](references/methodology-and-ip.md)。
 
 ## 许可证
 

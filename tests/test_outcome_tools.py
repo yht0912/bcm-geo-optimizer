@@ -19,6 +19,7 @@ from geo_privacy_export import (  # noqa: E402
     build_privacy_bundle,
     read_salt,
 )
+from geo_claim_gate import ClaimError, build_result, gate_claim, load_claims  # noqa: E402
 from geo_outcome_scorecard import (  # noqa: E402
     EvidenceError,
     build_scorecard,
@@ -104,7 +105,7 @@ class OutcomeScorecardTests(unittest.TestCase):
             "example-study",
             "Synthetic import check",
         )
-        self.assertEqual(bundle["schema_version"], "1.1.0")
+        self.assertEqual(bundle["schema_version"], "1.2.0")
         self.assertEqual(len(bundle["input_sha256"]), 64)
 
     def test_csv_import_rejects_unknown_columns(self) -> None:
@@ -149,7 +150,11 @@ class OutcomeScorecardTests(unittest.TestCase):
 
     def test_json_schema_versions_match_package(self) -> None:
         version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
-        for name in ("evidence-bundle.schema.json", "action-bundle.schema.json"):
+        for name in (
+            "evidence-bundle.schema.json",
+            "action-bundle.schema.json",
+            "outcome-claim.schema.json",
+        ):
             schema = json.loads((ROOT / "schemas" / name).read_text(encoding="utf-8"))
             self.assertEqual(schema["properties"]["schema_version"]["const"], version)
 
@@ -163,6 +168,36 @@ class OutcomeScorecardTests(unittest.TestCase):
             path.write_text(json.dumps(payload), encoding="utf-8")
             with self.assertRaisesRegex(EvidenceError, "unsupported schema_version"):
                 load_bundle(path)
+
+    def test_claim_gate_accepts_qualified_ai_outcome(self) -> None:
+        claims, metadata = load_claims(ROOT / "examples" / "outcome-claims-sample.json")
+        result = build_result(claims, metadata)
+        self.assertEqual(result["gate_status"], "qualified")
+        self.assertEqual(result["counts"]["rejected"], 0)
+
+    def test_observed_change_requires_matched_comparison(self) -> None:
+        claims, _ = load_claims(ROOT / "examples" / "outcome-claims-sample.json")
+        claim = copy.deepcopy(claims[0])
+        claim["claim_type"] = "observed_change"
+        claim.pop("comparison", None)
+        decision = gate_claim(claim)
+        self.assertEqual(decision["decision"], "rejected")
+        self.assertIn("comparison_required", decision["reasons"])
+
+    def test_causal_claim_requires_supported_design(self) -> None:
+        claims, _ = load_claims(ROOT / "examples" / "outcome-claims-sample.json")
+        claim = copy.deepcopy(claims[0])
+        claim["claim_type"] = "causal_estimate"
+        claim["comparison"] = {
+            "baseline_study_id": "baseline",
+            "retest_study_id": "retest",
+            "matched_pairs": 10,
+            "matched_coverage": 1.0,
+        }
+        claim.pop("causal_design", None)
+        decision = gate_claim(claim)
+        self.assertEqual(decision["decision"], "rejected")
+        self.assertIn("causal_design_required", decision["reasons"])
 
 
 if __name__ == "__main__":

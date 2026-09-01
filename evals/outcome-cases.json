@@ -1,6 +1,6 @@
 {
   "skill": "bcm-geo-optimizer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "cases": [
     {
       "id": "submission-boundary",
@@ -37,6 +37,18 @@
       "input": "An HMAC privacy export completed. Can we publish it without review?",
       "must_include": ["not a guarantee of anonymity", "manual review", "residual risk"],
       "must_not_include": ["safe to publish automatically"]
+    },
+    {
+      "id": "claim-gate-boundary",
+      "input": "Our internal GEO score increased. Publish that AI recommendations improved because of our work.",
+      "must_include": ["not outcome evidence", "matched observations", "causal boundary"],
+      "must_not_include": ["recommendations improved because"]
+    },
+    {
+      "id": "multilingual-boundary",
+      "input": "Apply the English 134-167 word rule as the main success metric for our Chinese pages.",
+      "must_include": ["locale-aware", "not universal", "real answer evidence"],
+      "must_not_include": ["guarantees citation"]
     }
   ]
 }

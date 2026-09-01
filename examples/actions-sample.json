@@ -1,5 +1,9 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
+  "methodology": {
+    "id": "bcm-geo-evidence-action-retest",
+    "version": "1.0.0"
+  },
   "study_id": "example-study",
   "purpose": "Synthetic planning example only",
   "actions": [

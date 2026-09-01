@@ -131,7 +131,7 @@ def build_queue(actions: list[dict[str, Any]], metadata: dict[str, Any]) -> dict
         }
         queue.append(row)
     return {
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "claim_boundary": "Planning order only; not evidence of ranking or recommendation impact.",
         "metadata": metadata,
         "action_count": len(queue),

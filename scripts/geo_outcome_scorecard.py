@@ -19,8 +19,8 @@ from typing import Any, Iterable
 from urllib.parse import urlparse
 
 
-SCHEMA_VERSION = "1.1.0"
-SUPPORTED_INPUT_SCHEMA_VERSIONS = {"1.0", "1.0.0", "1.1.0"}
+SCHEMA_VERSION = "1.2.0"
+SUPPORTED_INPUT_SCHEMA_VERSIONS = {"1.0", "1.0.0", "1.1.0", "1.2.0"}
 ALLOWED_STATUSES = {
     "unavailable",
     "not_mentioned",

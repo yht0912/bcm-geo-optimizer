@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.2.0",
+  "methodology": {
+    "id": "bcm-geo-evidence-action-retest",
+    "version": "1.0.0"
+  },
+  "claims": [
+    {
+      "claim_id": "matched-recommendation-change",
+      "claim_type": "observed_change",
+      "statement": "Recommendation rate increased in the matched synthetic panel.",
+      "highest_verified_state": "recommended",
+      "evidence_refs": [
+        "examples/evidence-baseline.json",
+        "examples/evidence-retest.json"
+      ],
+      "comparison": {
+        "baseline_study_id": "synthetic-baseline",
+        "retest_study_id": "synthetic-retest",
+        "matched_pairs": 5,
+        "matched_coverage": 0.8333
+      },
+      "confidence": 0.7,
+      "status": "qualified",
+      "limitations": [
+        "Synthetic example only.",
+        "The matched change does not establish causality."
+      ]
+    }
+  ]
+}

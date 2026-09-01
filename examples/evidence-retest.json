@@ -1,5 +1,11 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
+  "methodology": {
+    "id": "bcm-geo-evidence-action-retest",
+    "version": "1.0.0",
+    "contract_version": "1.2.0",
+    "claim_boundary": "Observed evidence only; no automatic causal or provider-wide claim."
+  },
   "study_id": "example-study",
   "purpose": "Synthetic demonstration data only",
   "source_format": "synthetic",

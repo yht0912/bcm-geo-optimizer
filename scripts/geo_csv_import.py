@@ -14,7 +14,13 @@ from typing import Any
 from geo_outcome_scorecard import EvidenceError, validate_observations
 
 
-SCHEMA_VERSION = "1.1.0"
+SCHEMA_VERSION = "1.2.0"
+METHODOLOGY = {
+    "id": "bcm-geo-evidence-action-retest",
+    "version": "1.0.0",
+    "contract_version": SCHEMA_VERSION,
+    "claim_boundary": "Observed evidence only; no automatic causal or provider-wide claim.",
+}
 REQUIRED_COLUMNS = [
     "observation_id",
     "panel_version",
@@ -105,6 +111,7 @@ def build_bundle(
 ) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
+        "methodology": METHODOLOGY,
         "study_id": study_id,
         "purpose": purpose,
         "source_format": "csv",

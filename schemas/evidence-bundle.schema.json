@@ -4,11 +4,12 @@
   "title": "BCM GEO Evidence Bundle",
   "description": "Observed AI answer evidence. It does not establish causality or provider-wide behavior.",
   "type": "object",
-  "required": ["schema_version", "study_id", "purpose", "observations"],
+  "required": ["schema_version", "methodology", "study_id", "purpose", "observations"],
   "properties": {
     "schema_version": {
-      "const": "1.1.0"
+      "const": "1.2.0"
     },
+    "methodology": {"$ref": "#/$defs/methodology"},
     "study_id": {
       "type": "string",
       "minLength": 1,
@@ -55,6 +56,17 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "methodology": {
+      "type": "object",
+      "required": ["id", "version", "contract_version", "claim_boundary"],
+      "properties": {
+        "id": {"const": "bcm-geo-evidence-action-retest"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "contract_version": {"const": "1.2.0"},
+        "claim_boundary": {"type": "string", "minLength": 1, "maxLength": 1000}
+      },
+      "additionalProperties": false
+    },
     "observation": {
       "type": "object",
       "required": [

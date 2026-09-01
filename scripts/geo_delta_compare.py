@@ -101,7 +101,7 @@ def compare(
         warnings.append("small_matched_sample_directional_only")
 
     return {
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "comparison_status": comparison_status,
         "claim_boundary": "Matched observational delta only; no causal attribution.",
         "minimum_required_coverage": min_coverage,

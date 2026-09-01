@@ -1,7 +1,7 @@
 # BCM GEO Outcome Engine
 
 [![CI](https://github.com/yht0912/bcm-geo-optimizer/actions/workflows/ci.yml/badge.svg)](https://github.com/yht0912/bcm-geo-optimizer/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-1.1.0-2563eb)](VERSION)
+[![Version](https://img.shields.io/badge/version-1.2.0-2563eb)](VERSION)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Zero dependencies](https://img.shields.io/badge/runtime-dependencies-0-16a34a)](scripts)
 
@@ -38,6 +38,8 @@ It reports the highest observed state without skipping steps.
 - **Conversion continuity:** recommendation visibility connects to qualified visits and business outcomes only when tracking is verified.
 - **Offline deterministic tools:** no API keys, no hidden network calls, and zero runtime dependencies.
 - **Portable evidence data:** strict CSV import, versioned JSON Schemas, and privacy-aware case export.
+- **Claim publication gate:** implementation, outcome, observed-change, and causal claims have different evidence requirements.
+- **Multilingual integrity:** locale-aware diagnostics replace universal English-only word-count or capitalization heuristics.
 
 ## Install
 
@@ -120,6 +122,15 @@ python3 scripts/geo_privacy_export.py \
   --output /tmp/geo-evidence-public.json
 ```
 
+Gate outcome claims before publication:
+
+```bash
+python3 scripts/geo_claim_gate.py \
+  --input examples/outcome-claims-sample.json \
+  --output /tmp/geo-claim-gate.json \
+  --strict
+```
+
 The tools validate supplied observations and calculate transparent rates with Wilson 95% intervals. They do not browse, invent evidence, or attribute causality.
 
 The privacy export reduces disclosure risk but does not guarantee anonymity. Review residual risks before sharing. See [data interoperability and privacy export](references/data-interoperability.md).
@@ -143,6 +154,7 @@ Portable contracts:
 
 - [Evidence bundle JSON Schema](schemas/evidence-bundle.schema.json)
 - [Action bundle JSON Schema](schemas/action-bundle.schema.json)
+- [Outcome claim JSON Schema](schemas/outcome-claim.schema.json)
 
 ## Verify the package
 
@@ -165,7 +177,7 @@ CI runs package validation, unit tests, and both example workflows on supported 
 
 ## Independent implementation
 
-This repository is an original implementation built from first principles around outcome measurement, production verification, and business attribution. It does not include source code, documentation text, or assets copied from other GEO projects.
+This repository is an original implementation built from first principles around outcome measurement, production verification, and business attribution. It does not include source code, prompt text, scoring formulas, documentation text, or assets copied from other GEO projects. See the registered [methodology and intellectual-property boundary](references/methodology-and-ip.md).
 
 ## Contributing and security
 

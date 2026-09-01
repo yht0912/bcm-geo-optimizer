@@ -3,7 +3,7 @@ name: bcm-geo-optimizer
 description: Outcome-first Generative Engine Optimization (GEO) and SEO workflow for improving real brand mentions, citations, recommendations, search visibility, and attributable conversions across AI assistants and search engines. Use when auditing or optimizing websites for ChatGPT, Claude, Gemini, Perplexity, Copilot, Google AI Overviews, Baidu, Bing, Google Search, or other answer/search systems; when measuring AI recommendation visibility; when planning llms.txt, structured data, entity, content, citation, indexing, or multi-site work; or when proving whether GEO changes produced externally observable results.
 license: MIT
 metadata:
-  version: 1.1.0
+  version: 1.2.0
   author: BCM
   category: marketing
   tags:
@@ -160,6 +160,8 @@ After a credible discovery/indexing window:
 6. Connect AI referrals, qualified visits, leads, or sales only when tracking is verified.
 7. Keep failures and missing evidence visible.
 
+Classify every headline conclusion as `implementation`, `search_outcome`, `ai_outcome`, `observed_change`, or `causal_estimate`. Implementation receipts cannot substantiate an AI/search outcome; change claims require a matched comparison; causal estimates require an explicit causal design. Run the outcome-claim gate before publishing a case study or executive result.
+
 Use the deterministic scripts:
 
 ```bash
@@ -181,11 +183,18 @@ python3 scripts/geo_csv_import.py \
   --study-id example-study \
   --purpose "Synthetic import check" \
   --output /tmp/geo-evidence.json
+
+python3 scripts/geo_claim_gate.py \
+  --input examples/outcome-claims-sample.json \
+  --output /tmp/geo-claim-gate.json \
+  --strict
 ```
 
 The scripts validate and aggregate supplied observations. They do not browse, generate evidence, or claim causation.
 
 For cross-tool JSON Schemas, CSV transport, or de-identified case exports, read [references/data-interoperability.md](references/data-interoperability.md). Treat privacy export as risk reduction, not guaranteed anonymity; review every transformed file before external sharing.
+
+Apply locale-aware diagnostics. English word-count, pronoun, capitalization, or sentence-length rules are not universal GEO success criteria for Chinese or other languages. See [references/multilingual-diagnostics.md](references/multilingual-diagnostics.md).
 
 ## Required deliverable
 
@@ -228,3 +237,5 @@ Use these labels consistently:
 - [Multi-site governance](references/multi-site-governance.md)
 - [Production release](references/production-release.md)
 - [Data interoperability and privacy export](references/data-interoperability.md)
+- [Methodology and intellectual-property boundary](references/methodology-and-ip.md)
+- [Multilingual diagnostics](references/multilingual-diagnostics.md)

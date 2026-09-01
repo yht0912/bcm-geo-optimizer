@@ -20,7 +20,13 @@ from typing import Any
 from geo_outcome_scorecard import EvidenceError, load_bundle, validate_observations
 
 
-SCHEMA_VERSION = "1.1.0"
+SCHEMA_VERSION = "1.2.0"
+METHODOLOGY = {
+    "id": "bcm-geo-evidence-action-retest",
+    "version": "1.0.0",
+    "contract_version": SCHEMA_VERSION,
+    "claim_boundary": "Observed evidence only; no automatic causal or provider-wide claim.",
+}
 DEFAULT_SALT_ENV = "GEO_ANONYMIZATION_SALT"
 
 
@@ -95,6 +101,7 @@ def build_privacy_bundle(
     validate_observations(transformed)
     return {
         "schema_version": SCHEMA_VERSION,
+        "methodology": METHODOLOGY,
         "study_id": f"study-{token(salt, 'study', study_id)}",
         "purpose": "De-identified evidence export for review or reproducible analysis.",
         "source_format": "privacy-export",

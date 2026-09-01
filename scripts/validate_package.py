@@ -22,13 +22,18 @@ REQUIRED = [
     "references/evidence-contract.md",
     "references/action-model.md",
     "references/data-interoperability.md",
+    "references/methodology-and-ip.md",
+    "references/multilingual-diagnostics.md",
     "schemas/evidence-bundle.schema.json",
     "schemas/action-bundle.schema.json",
+    "schemas/outcome-claim.schema.json",
     "scripts/geo_outcome_scorecard.py",
     "scripts/geo_delta_compare.py",
     "scripts/geo_action_prioritizer.py",
     "scripts/geo_csv_import.py",
     "scripts/geo_privacy_export.py",
+    "scripts/geo_claim_gate.py",
+    "examples/outcome-claims-sample.json",
     "evals/trigger-cases.json",
     "evals/outcome-cases.json",
 ]
@@ -100,6 +105,7 @@ def main() -> int:
     for relative in (
         "schemas/evidence-bundle.schema.json",
         "schemas/action-bundle.schema.json",
+        "schemas/outcome-claim.schema.json",
     ):
         path = ROOT / relative
         if not path.exists():
@@ -118,6 +124,7 @@ def main() -> int:
     try:
         from geo_action_prioritizer import load_actions
         from geo_outcome_scorecard import load_bundle
+        from geo_claim_gate import load_claims
 
         for relative in (
             "examples/evidence-baseline.json",
@@ -126,6 +133,7 @@ def main() -> int:
         ):
             load_bundle(ROOT / relative)
         load_actions(ROOT / "examples/actions-sample.json")
+        load_claims(ROOT / "examples/outcome-claims-sample.json")
     except (ImportError, ValueError, OSError) as exc:
         fail(f"example validation failed: {exc}", failures)
 

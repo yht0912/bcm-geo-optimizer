@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 — 2026-09-01
+
+- Registered the independent BCM evidence-action-retest method and its public/protected intellectual-property boundary.
+- Added a required methodology stamp to portable evidence and action bundles.
+- Added an outcome-claim schema and deterministic publication gate for implementation, search, AI, change, and causal claims.
+- Added multilingual diagnostic policy that rejects universal English-only content heuristics.
+- Documented conceptual provenance reviews without importing third-party code, prompts, scoring formulas, documentation, or assets.
+
 ## 1.1.0 — 2026-09-01
 
 - Added portable JSON Schemas for evidence and action bundles.
