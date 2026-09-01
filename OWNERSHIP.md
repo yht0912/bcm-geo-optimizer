@@ -31,4 +31,3 @@ Until the maintainer publishes a legally reviewed contribution agreement and
 acceptance process, external source-code contributions are not merged. Issues,
 reproducible test cases, localization feedback, and design discussion remain
 welcome. See `CONTRIBUTING.md`.
-

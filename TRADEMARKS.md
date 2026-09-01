@@ -14,4 +14,3 @@ and license notices.
 No statement here represents that a particular mark has completed registration
 in every jurisdiction. Trademark registration and enforcement are handled
 separately from the source-code license.
-

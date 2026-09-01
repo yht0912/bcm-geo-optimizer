@@ -13,4 +13,3 @@ projects.
 If a future release adds a dependency, the release must record its name,
 version, source, license, notice obligations, modifications, and distribution
 scope here before it can pass validation.
-
