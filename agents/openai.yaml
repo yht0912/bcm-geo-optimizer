@@ -1,0 +1,4 @@
+interface:
+  display_name: "BCM GEO Outcome Engine"
+  short_description: "用真实证据提升 AI 引用、推荐与搜索增长"
+  default_prompt: "Use $bcm-geo-optimizer to build an evidence-backed GEO plan and measure real mentions, citations, recommendations, and conversions without overstating results."

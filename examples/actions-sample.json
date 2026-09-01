@@ -1,0 +1,51 @@
+{
+  "study_id": "example-study",
+  "purpose": "Synthetic planning example only",
+  "actions": [
+    {
+      "action_id": "repair-canonical",
+      "priority_class": "P0",
+      "limiting_layer": "discovery",
+      "observed_gap": "The preferred decision page declares a conflicting canonical.",
+      "evidence_ref": "synthetic/audit/canonical",
+      "evidence_strength": 1.0,
+      "impact": 5,
+      "reach": 4,
+      "effort": 2,
+      "risk": 3,
+      "reversibility": 5,
+      "expected_state": "discovered",
+      "acceptance_check": "Origin and public rendered HTML expose the intended self-canonical."
+    },
+    {
+      "action_id": "add-proof-unit",
+      "priority_class": "P1",
+      "limiting_layer": "answerability",
+      "observed_gap": "The decision page makes a key claim without scope, date, or supporting source.",
+      "evidence_ref": "synthetic/audit/claim-01",
+      "evidence_strength": 0.75,
+      "impact": 5,
+      "reach": 3,
+      "effort": 3,
+      "risk": 2,
+      "reversibility": 5,
+      "expected_state": "cited",
+      "acceptance_check": "The released page contains the approved claim, scope, proof, source, date, and limitation."
+    },
+    {
+      "action_id": "test-machine-helper",
+      "priority_class": "P3",
+      "limiting_layer": "discovery",
+      "observed_gap": "A machine-readable helper may improve discovery, but no provider-specific evidence is available.",
+      "evidence_ref": "synthetic/hypothesis/helper-01",
+      "evidence_strength": 0.25,
+      "impact": 2,
+      "reach": 2,
+      "effort": 2,
+      "risk": 1,
+      "reversibility": 5,
+      "expected_state": "discovered",
+      "acceptance_check": "Run as a bounded experiment and record provider readback or a null result."
+    }
+  ]
+}

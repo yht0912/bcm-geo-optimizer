@@ -1,0 +1,57 @@
+{
+  "study_id": "example-study",
+  "purpose": "Synthetic scorecard demonstration data only",
+  "observations": [
+    {
+      "observation_id": "sample-001",
+      "panel_version": "demo-v1",
+      "prompt_id": "category-shortlist",
+      "prompt_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "provider": "example-ai-a",
+      "model": "example-model-1",
+      "locale": "en-US",
+      "region": "US",
+      "observed_at": "2026-09-01T09:00:00+00:00",
+      "status": "recommended",
+      "brand": "Example Brand",
+      "source_urls": ["https://example.com/guide"],
+      "evidence_excerpt": "Example Brand was included in the observed shortlist.",
+      "capture_ref": "synthetic/sample-001",
+      "limitations": "Synthetic example; not a live provider observation."
+    },
+    {
+      "observation_id": "sample-002",
+      "panel_version": "demo-v1",
+      "prompt_id": "trust-proof",
+      "prompt_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "provider": "example-ai-b",
+      "model": "example-model-2",
+      "locale": "en-US",
+      "region": "US",
+      "observed_at": "2026-09-01T09:15:00+00:00",
+      "status": "cited",
+      "brand": "Example Brand",
+      "source_urls": ["https://example.com/evidence"],
+      "evidence_excerpt": "The answer linked to an Example Brand evidence page.",
+      "capture_ref": "synthetic/sample-002",
+      "limitations": "Synthetic example; not a live provider observation."
+    },
+    {
+      "observation_id": "sample-003",
+      "panel_version": "demo-v1",
+      "prompt_id": "comparison",
+      "prompt_hash": "5555555555555555555555555555555555555555555555555555555555555555",
+      "provider": "example-ai-b",
+      "model": "example-model-2",
+      "locale": "zh-CN",
+      "region": "CN",
+      "observed_at": "2026-09-01T09:20:00+00:00",
+      "status": "not_mentioned",
+      "brand": "Example Brand",
+      "source_urls": [],
+      "evidence_excerpt": "The comparison did not include Example Brand.",
+      "capture_ref": "synthetic/sample-003",
+      "limitations": "Synthetic example; not a live provider observation."
+    }
+  ]
+}

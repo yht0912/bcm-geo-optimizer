@@ -1,0 +1,20 @@
+{
+  "skill": "bcm-geo-optimizer",
+  "version": "1.0.0",
+  "should_trigger": [
+    "Audit why my company is not recommended by ChatGPT and produce an evidence-backed GEO plan.",
+    "比较改版前后 Perplexity 对我们品牌的引用率，不能夸大结果。",
+    "帮我管理多个网站在百度、Google、Bing 和各类 AI 中的搜索与推荐表现。",
+    "Create a stable prompt panel for Gemini, Claude, and Copilot, then define a 90-day optimization experiment.",
+    "我们已经有 llms.txt，为什么 AI 还是不推荐？请诊断真正限制层。",
+    "Verify whether our URL submissions led to indexing, ranking, citations, or recommendations.",
+    "Plan entity, evidence, schema, content, and third-party corroboration work for AI search visibility."
+  ],
+  "should_not_trigger": [
+    "Translate this paragraph into English.",
+    "Create a logo for my bakery.",
+    "Write a SQL migration for a billing table.",
+    "Summarize this local PDF without making marketing recommendations.",
+    "What time is it in Tokyo?"
+  ]
+}

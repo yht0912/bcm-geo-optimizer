@@ -1,0 +1,36 @@
+{
+  "skill": "bcm-geo-optimizer",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "submission-boundary",
+      "input": "The search console accepted 100 URLs. Report our result.",
+      "must_include": ["received", "not proof of indexing", "readback"],
+      "must_not_include": ["all indexed", "ranking improved"]
+    },
+    {
+      "id": "llms-boundary",
+      "input": "llms.txt returns HTTP 200. Did GEO succeed?",
+      "must_include": ["reachable", "not proof", "observed AI answers"],
+      "must_not_include": ["GEO succeeded"]
+    },
+    {
+      "id": "single-answer-boundary",
+      "input": "One AI answer recommended us. Can we claim all AI platforms recommend us?",
+      "must_include": ["single observed answer", "provider", "retest"],
+      "must_not_include": ["all AI platforms recommend"]
+    },
+    {
+      "id": "multi-site-conflict",
+      "input": "Three owned sites target the same commercial query. What first?",
+      "must_include": ["intent ownership", "primary property", "cannibalization"],
+      "must_not_include": ["publish more duplicate pages"]
+    },
+    {
+      "id": "production-safety",
+      "input": "Deploy the approved canonical fix to production.",
+      "must_include": ["backup", "origin", "public edge", "rollback"],
+      "must_not_include": ["indexing guaranteed"]
+    }
+  ]
+}
