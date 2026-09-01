@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 import sys
@@ -15,8 +16,14 @@ REQUIRED = [
     "README.md",
     "README.zh-CN.md",
     "LICENSE",
+    "NOTICE",
     "SECURITY.md",
     "CONTRIBUTING.md",
+    "OWNERSHIP.md",
+    "PROVENANCE.md",
+    "ORIGIN.json",
+    "THIRD_PARTY_NOTICES.md",
+    "TRADEMARKS.md",
     "VERSION",
     "agents/openai.yaml",
     "references/evidence-contract.md",
@@ -75,6 +82,27 @@ def main() -> int:
         if not (ROOT / relative).is_file():
             fail(f"missing required file: {relative}", failures)
 
+    origin_path = ROOT / "ORIGIN.json"
+    if origin_path.exists():
+        try:
+            origin = json.loads(origin_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            fail(f"invalid ORIGIN.json: {exc}", failures)
+        else:
+            if origin.get("project") != "bcm-geo-optimizer":
+                fail("ORIGIN.json project mismatch", failures)
+            if origin.get("steward") != "南昌包参谋品牌策划有限公司":
+                fail("ORIGIN.json steward mismatch", failures)
+            if origin.get("first_party_license") != "MIT":
+                fail("ORIGIN.json license mismatch", failures)
+            if origin.get("external_code_imports") != []:
+                fail("ORIGIN.json external_code_imports must be an explicit empty array", failures)
+            for reference in origin.get("conceptual_references", []):
+                if reference.get("code_imported") is not False:
+                    fail("conceptual reference must state code_imported=false", failures)
+                if not re.fullmatch(r"[a-f0-9]{40}", str(reference.get("commit", ""))):
+                    fail("conceptual reference must use a fixed 40-character commit", failures)
+
     version = (ROOT / "VERSION").read_text(encoding="utf-8").strip() if (ROOT / "VERSION").exists() else ""
     skill_path = ROOT / "SKILL.md"
     if skill_path.exists():
@@ -83,6 +111,8 @@ def main() -> int:
             fail("SKILL.md name must be bcm-geo-optimizer", failures)
         if not frontmatter.get("description"):
             fail("SKILL.md description is required", failures)
+        if "南昌包参谋品牌策划有限公司" not in skill_path.read_text(encoding="utf-8"):
+            fail("SKILL.md must identify the BCM legal steward", failures)
         metadata_version = re.search(
             r"^\s{2}version:\s*([^\s]+)\s*$",
             skill_path.read_text(encoding="utf-8"),
@@ -140,6 +170,12 @@ def main() -> int:
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts:
             continue
+        if path.is_symlink():
+            try:
+                path.resolve(strict=True).relative_to(ROOT.resolve())
+            except (OSError, ValueError):
+                fail(f"symlink escapes package root: {path.relative_to(ROOT)}", failures)
+            continue
         if path.suffix.lower() in FORBIDDEN_SUFFIXES:
             fail(f"forbidden sensitive file type: {path.relative_to(ROOT)}", failures)
         if path.suffix.lower() not in TEXT_SUFFIXES and path.name not in {"LICENSE", "VERSION"}:
@@ -151,6 +187,25 @@ def main() -> int:
         for label, pattern in FORBIDDEN_PATTERNS.items():
             if pattern.search(text):
                 fail(f"{label} pattern in {path.relative_to(ROOT)}", failures)
+
+    local_modules = {path.stem for path in (ROOT / "scripts").glob("*.py")}
+    allowed_runtime = set(sys.stdlib_module_names) | local_modules
+    for path in (ROOT / "scripts").glob("*.py"):
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        except SyntaxError as exc:
+            fail(f"invalid Python syntax in {path.relative_to(ROOT)}: {exc}", failures)
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names = [alias.name.split(".", 1)[0] for alias in node.names]
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                names = [node.module.split(".", 1)[0]]
+            else:
+                continue
+            for name in names:
+                if name not in allowed_runtime:
+                    fail(f"undeclared non-stdlib import {name} in {path.relative_to(ROOT)}", failures)
 
     if failures:
         for message in failures:

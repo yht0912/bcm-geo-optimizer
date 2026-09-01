@@ -4,7 +4,7 @@ description: Outcome-first Generative Engine Optimization (GEO) and SEO workflow
 license: MIT
 metadata:
   version: 1.2.0
-  author: BCM
+  author: BaoCanMou / 南昌包参谋品牌策划有限公司
   category: marketing
   tags:
     - geo

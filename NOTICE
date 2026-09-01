@@ -1,0 +1,11 @@
+BCM GEO Outcome Engine
+Copyright (c) 2026 南昌包参谋品牌策划有限公司
+
+The first-party skill instructions, schemas, deterministic scripts,
+evaluations, examples, and documentation in this repository are independent
+BCM works distributed under the MIT License in LICENSE.
+
+This public package does not include or license the BCM GEO production
+platform, customer data, private connectors, credentials, internal thresholds,
+site-specific strategy, trademarks, logos, or hosted services.
+

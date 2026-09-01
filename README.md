@@ -185,4 +185,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for pull requests and [SECURITY.md](SECUR
 
 ## License
 
-[MIT](LICENSE)
+BCM's original public implementation is licensed under [MIT](LICENSE).
+Copyright remains with 南昌包参谋品牌策划有限公司; the license does not include
+BCM trademarks, production services, credentials, customer data, or private
+strategy. See [Ownership](OWNERSHIP.md), [Provenance](PROVENANCE.md),
+[third-party notices](THIRD_PARTY_NOTICES.md), and
+[trademark policy](TRADEMARKS.md).

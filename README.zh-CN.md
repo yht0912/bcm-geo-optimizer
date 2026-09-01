@@ -144,4 +144,7 @@ python3 -m unittest discover -s tests -v
 
 ## 许可证
 
-[MIT](LICENSE)
+BCM 原创公开实现采用 [MIT](LICENSE) 许可证，原始版权归南昌包参谋品牌策划有限公司；
+该许可不包含 BCM 商标、生产服务、凭据、客户数据或私有策略。详见
+[权属边界](OWNERSHIP.md)、[来源记录](PROVENANCE.md)、
+[第三方说明](THIRD_PARTY_NOTICES.md)和[商标政策](TRADEMARKS.md)。
