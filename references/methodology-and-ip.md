@@ -1,11 +1,13 @@
 # Methodology and intellectual-property boundary
 
-## Registered method
+## Versioned method identity
 
 - Method ID: `bcm-geo-evidence-action-retest`
 - Initial method version: `1.0.0`
 - Owner label: `BCM`
 - Objective: improve externally observable search visibility, AI mentions, citations, recommendations, and attributable conversions without promoting implementation signals into outcome claims.
+
+This identifier is a technical registry and provenance mechanism. It is not a claim that a patent, trademark, or copyright registration has been granted.
 
 Every evidence bundle should carry the method ID, method version, evidence-contract version, and the non-causality boundary. This makes later recomputation explicit even when the software package changes.
 
